@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Availmeds</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.7.0.min.js"
+     crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+      function setActiveUser()
+    {
+      var au=localStorage.getItem("activemail");
+      // alert(au);
+      $("#memail").val(au).prop("readonly",true);
+
+    }
+    setActiveUser();
+        $("#availbtn").click(function(){
+          alert("hi");
+              var mmail=$("#memail").val();
+              var mname=$("#medname").val();
+              var mexp=$("#expdate").val();
+              var mqty=$("#medqty").val();
+              var mpckt=$("#medtype").val();
+           var medobj={
+          type:"get",
+          url:"/availajax",
+          data:{
+            kuchmmail:mmail,
+            kuchmname:mname,
+            kuchmexp:mexp,
+            kuchmqty:mqty,
+            kuchmpckt:mpckt
+          }
+           }
+           $.ajax(medobj).done(function (respkuch1) {
+                    //alert(respkuch);
+                    $("#availsuc").html(respkuch1);
+                }).fail(function (errkuch1) {
+                    //alert(errkuch);
+                    $("#availsuc").html(errkuch1);
+                })
+        })
+    })
+</script>  
+</head>
+  <body>
+    <nav class="navbar sticky-top bg-dark border-bottom border-bottom-dark" data-bs-theme="dark" style="background-color:mediumpurple;">
+      <div class="container-fluid" >
+        <a class="navbar-brand" ><h1>MedDon.com</h1></a>
+        <form class="d-flex">
+          </form>
+      </div>
+    </nav>
+    <form class="row g-3"  style="margin-left: 100px;margin-right: 100px;"> 
+        
+           <div>
+            <center><h1>AVAIL MEDICINES</h1></center>
+           </div>
+        <div class="col-md-6">
+          <label for="inputEmail4" class="form-label">Email</label>
+          <input type="email" class="form-control" id="memail">
+        </div>
+        <div class="col-md-6">
+          <label for="inputPassword4" class="form-label">Medicine Name</label>
+          <input type="text" class="form-control" id="medname">
+        </div>
+        <div class="col-md-4">
+          <label for="inputAddress" class="form-label">Expiry Date</label>
+          <input type="date" class="form-control" id="expdate" >
+        </div>
+        <div class="col-md-4">
+          <label for="inputAddress2" class="form-label">Quantity</label>
+          <input type="number" class="form-control" id="medqty" >
+        </div>
+       
+        <div class="col-md-4">
+          <label for="inputState" class="form-label">Packaging Type</label>
+          <select id="medtype" class="form-select">
+            <option selected>Choose...</option>
+            <option>Pills</option>
+            <option > Capsules</option>
+            <option >Syrups</option>
+            <option >Sachets</option>
+          </select>
+        </div>
+        
+        <div class="col-12">
+          <center>
+          <button type="button" class="btn btn-dark btn-lg" id="availbtn">Avail It</button><span id="availsuc"></span></center>
+        </div>
+      </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>

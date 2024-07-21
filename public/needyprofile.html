@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Needy Profilepage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script>
+    function doprev(refFile,inimgprev)
+        {
+            const [file] = refFile.files
+            if (file) {
+              inimgprev.src = URL.createObjectURL(file)
+            }
+        }
+  </script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+   <script
+   src="https://code.jquery.com/jquery-3.7.0.min.js"
+    crossorigin="anonymous"></script>
+    
+   
+  <script>
+    $(document).ready(function(){
+      function setActiveUser()
+    {
+      var au=localStorage.getItem("activemail");
+      // alert(au);
+      $("#inemail").val(au).prop("readonly",true);
+
+    }
+    setActiveUser();
+    $("#fetchit").click(doSearch)
+    function doSearch()
+    {
+        
+        var emailKuch=$("#inemail").val();
+            var obj={
+                type:"get",
+                url:"/getneedy-json-record",
+                data:{
+                  needymail:emailKuch
+                }
+            }
+
+            $.ajax(obj).done(function(respJSON)
+            {
+                alert(JSON.stringify(respJSON));
+                //$("#res").html(respKuch);
+                if(respJSON[0]!=null)
+          {alert("mil gyaa");
+            document.getElementById("server").disabled=true;
+          document.getElementById("dateup").disabled=false;
+          }
+              
+          else 
+          { alert("khali hai");
+            document.getElementById("server").disabled=false;
+          document.getElementById("dateup").disabled=true;
+          }
+                $("#inname").val(respJSON[0].nameofn)
+                
+                $("#incont").val(respJSON[0].contneedy);
+                $("#inaddr").val(respJSON[0].addressofn);
+                 $("#incity").val(respJSON[0].cityn);
+                  $("#ingen").val(respJSON[0].gendern);
+                 $("#indob").val(respJSON[0].dobn);
+              
+
+                  $("#hdn2").val(respJSON[0].nfilename);
+                  // alert(filename);
+               $("#inimgprev").prop("src","uploads/"+respJSON[0].nfilename);
+              
+               
+            }).fail(function(errKuch){
+                 alert(errKuch)
+                //$("#res").html(respKuch);
+            })
+        
+          }
+         
+        })</script>
+</head>
+  <body>
+    <nav class="navbar sticky-top bg-dark border-bottom border-bottom-dark" data-bs-theme="dark" style="background-color:mediumpurple;">
+      <div class="container-fluid" >
+        <a class="navbar-brand" ><h1>MedDon.com</h1></a>
+        <form class="d-flex">
+          </form>
+      </div>
+    </nav>
+    <div class="container">
+        <div>
+            <center><h1>PROFILE FORM</h1></center>
+        </div>
+    <form class="row g-3"  method="post" enctype="multipart/form-data" >
+      <input type="hidden" id="hdn2" name="hdn2">
+        <div class="col-md-6">
+          <label for="inputEmail4" class="form-label">Email</label>
+          <input type="email" class="form-control" id="inemail" name="nnemail">
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-dark mar btn-lg" id="fetchit">Fetch</button>
+            <span>Click to check for previously saved records</span>
+        </div>
+        <div class="col-6">
+          <label for="inputName" class="form-label">Name</label>
+          <input type="text" class="form-control" id="inname"  name="nnname">
+        </div>
+        <div class="col-md-6">
+            <label for="inputContact" class="form-label">Contact</label>
+            <input type="number" class="form-control" id="incont" name="nncont">
+          </div>
+        <div class="col-12">
+          <label for="inputAddress" class="form-label">Address</label>
+          <input type="text" class="form-control" id="inaddr" name="nnaddr" >
+        </div>
+        <div class="col-md-5">
+          <label for="inputCity" class="form-label">City</label>
+          <input type="text" class="form-control" id="incity" name="nncity">
+        </div>
+        <div class="col-md-5">
+            <label for="inputdob" class="form-label">Date of Birth</label>
+            <input type="date" class="form-control" id="indob" name="nndob">
+          </div>
+        <div class="col-md-3">
+          <label for="inputgender" class="form-label">Gender</label>
+          <select id="ingen" class="form-select" name="nngen">
+            <option selected>Choose...</option>
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+        </div>
+        
+        
+          <div class="col-md-4">
+            <label for="impr" class="form-label">Upload Aadhar Card</label>
+            <input type="file" name="nnpic" id="inpic" accept="image/*" onchange="doprev(this,inimgprev)" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <label for="" class="form-label">Preview</label>
+            <img src="" alt="" id="inimgprev" width="100" height="100" >
+          </div>
+          
+       <center>
+    
+        <div class="col-md-6">
+          <button type="submit" class="btn btn-dark mar btn-lg" formaction="/needyprofileform" disabled id="server">Send To Server</button>
+          <button type="submit" class="btn btn-dark mar btn-lg" formaction="/updateneedy" disabled id="dateup">Update</button>
+         
+        </div>
+    </center>
+      
+    </div>
+  </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>

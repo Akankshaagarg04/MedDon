@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PROFILE PAGE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script>
+        function doprev(refFile,iimgprev)
+        {
+            const [file] = refFile.files
+            if (file) {
+              iimgprev.src = URL.createObjectURL(file)
+            }
+        }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.7.0.min.js"
+     crossorigin="anonymous"></script>
+     
+    <script>
+        $(document).ready(function(){
+          
+    function setActiveUser()
+    {
+      var au=localStorage.getItem("activemail");
+      // alert(au);
+      $("#iemail").val(au).prop("readonly",true);
+
+    }
+    setActiveUser();
+    $("#searchit").click(doSearch)
+    function doSearch()
+    {
+        
+        var emailKuch=$("#iemail").val();
+            var obj={
+                type:"get",
+                url:"/get-json-record",
+                data:{
+                  kuchmail:emailKuch
+                }
+            }
+
+            $.ajax(obj).done(function(respJSON)
+            {
+                alert(JSON.stringify(respJSON));
+                //$("#res").html(respKuch);
+                if(respJSON[0]!=null)
+          {alert("mil gyaa");
+            document.getElementById("server").disabled=true;
+          document.getElementById("dateup").disabled=false;
+          }
+              
+          else 
+          { alert("khali hai");
+            document.getElementById("server").disabled=false;
+          document.getElementById("dateup").disabled=true;
+          }
+                $("#iname").val(respJSON[0].nameofp)
+                
+                $("#icont").val(respJSON[0].contnum);
+                $("#iaddr").val(respJSON[0].address);
+                 $("#icity").val(respJSON[0].city);
+                  $("#igen").val(respJSON[0].gender);
+                  $("#iproof").val(respJSON[0].idproof);
+              
+
+                  $("#hdn1").val(respJSON[0].filename);
+                  // alert(filename);
+               $("#iimgprev").prop("src","uploads/"+respJSON[0].filename);
+               var availhrs=respJSON[0].availhrs.split("-");
+               var avf=availhrs[0];
+               var avt=availhrs[1];
+               $("#ifhr").val(avf);
+               $("#ithr").val(avt);
+
+            }).fail(function(errKuch){
+                 alert(errKuch)
+                //$("#res").html(respKuch);
+            })
+          }
+        
+     
+    
+})
+    </script>
+</head>
+  <body>
+    <nav class="navbar sticky-top bg-dark border-bottom border-bottom-dark" data-bs-theme="dark" style="background-color:mediumpurple;">
+      <div class="container-fluid" >
+        <a class="navbar-brand" ><h1>MedDon.com</h1></a>
+        <form class="d-flex">
+          </form>
+      </div>
+    </nav>
+    <div class="container">
+        <div>
+            <center><h1>PROFILE FORM</h1></center>
+        </div>
+    <form class="row g-3"  method="post" enctype="multipart/form-data" >
+      <input type="hidden" id="hdn1" name="hdn1">
+        <div class="col-md-6">
+          <label for="inputEmail4" class="form-label">Email</label>
+          <input type="email" class="form-control" id="iemail" name="nemail">
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-dark mar btn-lg" id="searchit" style="margin-top: 30px;">Search</button><span>Search for previous records</span>
+        </div>
+        <div class="col-6">
+          <label for="inputName" class="form-label">Name</label>
+          <input type="text" class="form-control" id="iname"  name="nname">
+        </div>
+        <div class="col-md-6">
+            <label for="inputContact" class="form-label">Contact</label>
+            <input type="number" class="form-control" id="icont" name="ncont">
+          </div>
+        <div class="col-12">
+          <label for="inputAddress" class="form-label">Address</label>
+          <input type="text" class="form-control" id="iaddr" name="naddr" placeholder="Apartment, studio, or floor">
+        </div>
+        <div class="col-md-5">
+          <label for="inputCity" class="form-label">City</label>
+          <input type="text" class="form-control" id="icity" name="ncity">
+        </div>
+        <div class="col-md-3">
+          <label for="inputgender" class="form-label">Gender</label>
+          <select id="igen" class="form-select" name="ngen">
+            <option selected>Choose...</option>
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+        </div>
+        
+        <div class="col-md-4">
+            <label for="inputid" class="form-label">ID Proof</label>
+            <select id="iproof" class="form-select" name="nproof">
+              <option selected>Choose...</option>
+              <option>Aadhar Card</option>
+              <option>PAN Card</option>
+              <option>Driving Liscence</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="impr" class="form-label">Upload ID Proof</label>
+            <input type="file" name="npic" id="ipic" accept="image/*" onchange="doprev(this,iimgprev)" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <label for="" class="form-label">Preview</label>
+            <img src="" alt="" id="iimgprev" width="100" height="100" >
+          </div>
+          <div class="col-md-8">
+            <label for="">Available hours</label>
+            <label for="">from</label>
+            <input type="time" name="nfhr" id="ifhr">
+            <label for="">to</label>
+            <input type="time" name="nthr" id="ithr">
+          </div>
+       <center>
+    
+        <div class="col-md-6">
+          <button type="submit" class="btn btn-dark mar btn-lg" formaction="/profileform" id="server">Send To Server</button>
+          <button type="submit" class="btn btn-dark mar btn-lg"  formaction="/profileupdate" id="dateup">Update</button>
+         
+        </div>
+    </center>
+      
+    </div>
+  </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>

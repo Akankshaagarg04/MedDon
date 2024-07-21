@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Needy Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.7.0.min.js"
+     crossorigin="anonymous"></script>
+<style>
+    
+    #cards{
+      display: flex;
+    margin-top: 60px;
+    margin-left: 90px;
+    }
+    .cardiv{
+      margin-left: 30px;
+    }
+    #exampleModalLabel{
+      color: white;
+    }
+    </style> 
+    <script>
+      $(document).ready(function(){
+        function setActiveUser()
+    {  if(localStorage.getItem("activemail")==undefined)
+    {
+      location.href="index.html";
+      return;
+    }
+      var au=localStorage.getItem("activemail");
+      // alert(au);
+      $("#spanWel1").html(au);
+      $("#isemail").val(au).prop("readonly",true);
+    }
+    setActiveUser();
+    
+    $("#logoutbtnn").click(function(){
+      alert();
+      localStorage.removeItem("activemail")
+      location.href="index.html";
+    
+    })
+    
+      
+      })
+    </script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+     <script
+     src="https://code.jquery.com/jquery-3.7.0.min.js"
+      crossorigin="anonymous"></script>
+    </head>
+    <body >
+      <nav class="navbar bg-dark border-bottom border-bottom-dark" data-bs-theme="dark">
+        <div class="container-fluid" >
+          <a class="navbar-brand" ><h1>MedDon.com</h1></a>
+          
+        </div>
+      </nav><br>
+      <center><h3><span>Welcome,</span> <span id="spanWel1"></span></h3></center>
+      <div id="cards">
+      <div class="card cardiv text-bg-dark mb-3" style="width: 18rem;">
+        <img src="images/prof.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">CREATE YOUR PROFILE</h5>
+          <p class="card-text">Tell us about yourself</p>
+          <center> <span>  <a href="needyprofile.html" class="btn btn-dark btn-outline-light mar btn-lg">PROFILE</a></span></center>
+        </div>
+      </div>
+      <div class="card cardiv text-bg-dark mb-3" style="width: 18rem;">
+        <img src="images/medicine.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">FIND MEDICINES</h5>
+          <p class="card-text">Find here the medicines you need</p>
+          <center> <span> <a href="findmeds.html" class="btn btn-dark btn-outline-light mar btn-lg">Find Meds</a></span></center>
+        </div>
+      </div><div class="card cardiv text-bg-dark mb-3" style="width: 18rem;">
+        <img src="images/setting.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">SETTINGS</h5>
+          <p class="card-text">Change your password here</p>
+          <center> <span> <button type="button" class="btn btn-dark btn-outline-light mar btn-lg" data-bs-toggle="modal" data-bs-target="#needyset">Settings</button></span></center>
+        </div>
+      </div><div class="card cardiv text-bg-dark mb-3" style="width: 18rem;">
+        <img src="images/logout.png" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">LOGOUT</h5>
+          <p class="card-text">Logout from your account</p>
+          <center> <span>  <input type="button" value="LOGOUT" id="logoutbtnn" class="btn btn-dark btn-outline-light mar btn-lg" onclick="doLogout();"></span></center>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="needyset" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header  bg-dark border-bottom border-bottom-dark" data-bs-theme="dark">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">CHANGE PASSWORD</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="col-md-12">
+              <label for="">Email</label>
+              <input type="email" name="nsemail" id="isemail" class="form-control">
+            </div>
+            <div class="col-md-12">
+              <label for="">Old Password</label>
+              <input type="password" name="nsop" id="isop" class="form-control">
+            </div>
+            <div class="col-md-12">
+              <label for="">New Password</label>
+              <input type="password" name="nsnp" id="isnp" class="form-control">
+            </div>
+            <div class="col-md-12">
+              <label for="">Confirm Password</label>
+              <input type="password" name="nscp" id="iscp" class="form-control">
+            </div>
+          </div>
+          <div class="modal-footer">
+            
+            <button type="button" class="btn btn-dark btn-lg" id="settings">Save changes</button>
+            <span id="sett">*</span>
+          </div>
+        </div>
+      </div>
+    </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    </body>
+  </html>

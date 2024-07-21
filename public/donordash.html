@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Donor Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<style>
+   
+    #cards{
+      display: flex;
+    margin-top: 60px;
+    margin-left: 90px;
+    }
+    .cardiv{
+      margin-left: 30px;
+    }
+    #exampleModalLabel{
+        color: white;
+      }
+    </style> 
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+     <script
+     src="https://code.jquery.com/jquery-3.7.0.min.js"
+      crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function(){
+
+        function setActiveUser()
+    {   if(localStorage.getItem("activemail")==undefined)
+    {
+      location.href="index.html";
+      return;
+    }
+      var au=localStorage.getItem("activemail");
+      // alert(au);
+      $("#spanWel").html(au);
+      $("#isemail").val(au).prop("readonly",true);
+    }
+    setActiveUser();
+
+        $("#settings").click(function(){
+          
+          var smail=$("#isemail").val();
+          var sopwd=$("#isop").val();
+          var snpwd=$("#isnp").val();
+          var scpwd=$("#iscp").val();
+          var sobj={
+            type:"get",
+            url:"/changepass",
+            data:{
+              kuchsmail:smail,
+              kuchsopwd:sopwd,
+              kuchsnpwd:snpwd,
+              kuchscpwd:scpwd
+            }
+          }
+          $.ajax(sobj).done(function(respset){
+            $("#sett").html(respset);
+          }).fail(function(errset){
+            $("#sett").html(errset);
+          })
+        })
+        $("#logoutbtn").click(function(){
+      localStorage.removeItem("activemail")
+      location.href="index.html";
+    
+    })
+    
+
+      })
+    </script>
+</head>
+  <body >
+    <nav class="navbar bg-dark border-bottom border-bottom-dark" data-bs-theme="dark">
+      <div class="container-fluid" >
+        <a class="navbar-brand" ><h1>MedDon.com</h1></a>
+        <form class="d-flex"><input type="button" value="LOG OUT" id="logoutbtn" class="btn btn-dark mar btn-lg" onclick="doLogout();">
+          </form>
+      </div>
+    </nav><br>
+    <center><h3><span>Welcome,</span> <span id="spanWel"></span></h3></center>
+    <div id="cards">
+    <div class="card cardiv text-bg-dark mb-3" style="width: 18rem;">
+      <img src="images/prof.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">CREATE YOUR PROFILE</h5>
+        <p class="card-text">Create your profile and verify yourself to start donating</p>
+        <center> <span>  <a href="profilepage.html" class="btn btn-dark btn-outline-light mar btn-lg">PROFILE</a></span></center>
+      </div>
+    </div>
+    <div class="card cardiv text-bg-dark mb-3" style="width: 18rem;">
+      <img src="images/medi.png" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">AVAIL MEDICINES</h5>
+        <p class="card-text">Avail all the medicines here you want to donate</p>
+        <center> <span>  <a href="availmed.html" class="btn btn-dark btn-outline-light mar btn-lg">AVAIL</a></span></center>
+      </div>
+    </div><div class="card cardiv text-bg-dark mb-3" style="width: 18rem;">
+      <img src="images/manager2.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">MANAGE MEDICINES</h5>
+        <p class="card-text">Update and manage your records here</p>
+        <center> <span>  <a href="medsmanager.html" class="btn btn-dark btn-outline-light mar btn-lg">MANAGE</a></span></center>
+      </div>
+    </div><div class="card cardiv text-bg-dark mb-3" style="width: 18rem;">
+      <img src="images/setting.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">SETTINGS</h5>
+        <p class="card-text">Update your account password here</p>
+    <center> <span>  <button type="button" class="btn btn-dark mar  btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#donorset" >SETTINGS</button></span></center>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="donorset" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-dark border-bottom border-bottom-dark" data-bs-theme="dark" id="heading">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">CHANGE PASSWORD</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="col-md-12">
+            <label for="">Email</label>
+            <input type="email" name="nsemail" id="isemail" class="form-control">
+          </div>
+          <div class="col-md-12">
+            <label for="">Old Password</label>
+            <input type="password" name="nsop" id="isop" class="form-control">
+          </div>
+          <div class="col-md-12">
+            <label for="">New Password</label>
+            <input type="password" name="nsnp" id="isnp" class="form-control">
+          </div>
+          <div class="col-md-12">
+            <label for="">Confirm Password</label>
+            <input type="password" name="nscp" id="iscp" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          
+          <button type="button" class="btn btn-dark btn-lg" id="settings">Save changes</button>
+          <span id="sett">*</span>
+        </div>
+      </div>
+    </div>
+  </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>

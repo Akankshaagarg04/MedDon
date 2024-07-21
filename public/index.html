@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <style>
+    .mar{
+        margin-right: 10px;
+    }
+    .logo{
+        
+        float: left;
+       
+    }
+    #pic{
+   background-image: url(images/signup.jpg);
+    }
+    
+    .sizebox{
+        height: 400px;
+        width: 400px;
+    }
+    #main{
+        height: 500px;
+        width: 395px;
+    }
+    
+    
+    #up{
+      margin-top: 30px;
+    }
+    .marg{
+      margin-top: 20px;
+    }
+    #btnsign{
+      margin-top: 50px;
+      margin-left: 100px;
+    }
+    #pwdi{
+      display: flex;
+    }
+    #pwdl{
+     flex-direction: row;
+    }
+    .incrt{
+     color: crimson;
+      }
+      .crt{
+    color: green;
+      }
+      #loginacc{
+        margin-right: 160px;
+      }
+      #exampleModalLabel{
+        color: white;
+      }
+      #exampleModalLabel2{
+        color: white;
+      }
+      body{
+        
+      width: inherit;
+      height: 1200px;
+      }
+      #content{
+        text-align: center;
+        margin-left: 20px;
+        margin-right: 20px;
+        font-size: large;
+      }
+      #para1{
+        margin-top: 100px;
+        margin-left: 1100px;
+        margin-right: 40px;
+      }
+      #serv{
+        text-align: center;
+        color: white;
+        margin-left: 750px;
+      }
+      #bout{
+        display: flex;
+      }
+      .crd{
+        margin-left: 150px;
+        margin-top: 10px;
+      }
+      #last{
+        width: inherit;
+        height: 400px;
+      }
+      #loginimg{
+        width: 200px;
+        height: 200px;
+        
+        background-image: url(images/loginimg.png);
+        border-radius: 50%;
+      }
+     
+ </style>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+ <script
+ src="https://code.jquery.com/jquery-3.7.0.min.js"
+  crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function(){
+      $("#ipass").blur(function(){
+        var pw=/(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+        var pass=$("#ipass").val();
+
+        if(pw.test(pass)==true)
+        {
+            $("#errpwd").html("Accepted").addClass("crt").removeClass("incrt");
+        }
+        else
+        {
+            $("#errpwd").html("Invalid").addClass("incrt").removeClass("crt");
+        }
+    });
+    $("#iemail").blur(function(){
+        var mid=/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/   ;
+        var maill=$("#iemail").val();
+        if(mid.test(maill)==true)
+        {
+            var mobj={
+              type:"get",
+              url:"/mail-chk",
+              data:{
+                passmail:maill
+              }
+            }
+            $.ajax(mobj).done(function(mailresp){
+                if(mailresp=="found")
+               { $("#errmail").html("Already Taken").addClass("incrt").removeClass("crt")}
+                else if(mailresp=="available")
+                { $("#errmail").html("Accepted").addClass("crt").removeClass("incrt")}
+            }).fail(function(mailerr){
+                 alert(mailerr);
+            })
+        }
+        else
+        {
+            $("#errmail").html("Invalid").addClass("incrt").removeClass("crt");
+        }
+    });
+        $("#signup").click(function(){
+            if($("#errmail").html()=="Accepted" && $("#errpwd").html()=="Accepted"){
+            var email=$("#iemail").val();
+            
+            var pwd=$("#ipass").val();
+            var type=$("#itype").val();
+           
+           var obj={
+                type:"get",
+                url:"/chk-submit",
+                data:{
+                kuchemail:email,
+                kuchpwd:pwd,
+                kuchtype:type,
+                
+            }
+            }
+            
+            $.ajax(obj).done(function (respkuch1) {
+                    //alert(respkuch);
+                    $("#btn-submit").html(respkuch1);
+                }).fail(function (errkuch1) {
+                    //alert(errkuch);
+                    $("#btn-submit").html(errkuch1);
+                })
+              }
+              else
+             { $("#btn-submit").html("please enter valid details");}
+
+    })
+    $("#loginacc").click(function(){
+            
+            var lemail=$("#ilemail").val();
+            
+            var lpwd=$("#ilpass").val();
+            
+            
+           var obj={
+                type:"get",
+                url:"/chk-login",
+                data:{
+                loginmail:lemail,
+                loginpwd:lpwd
+                
+            }
+            }
+            
+            $.ajax(obj).done(function (resploJSON) {
+              localStorage.setItem("activemail",$("#ilemail").val())
+                    if(resploJSON=="Donor")
+                    {
+                     location.href="donordash.html";
+                    }
+                    else if(resploJSON=="Needy")
+                    {
+                     location.href="needydash.html";
+                    }
+                    else
+                    $("#btn-login").html(resploJSON).addClass("incrt").removeClass("crt");
+                   
+                }).fail(function (errkuchlo) {
+                    alert(errkuchlo);
+                    
+                })
+
+    })
+    $("#btnclose").click(function(){
+      location.reload();
+    })
+    $(".fa-solid").mouseup(function(){
+        
+        $(this).removeClass("fa-eye").addClass("fa-eye-slash");
+        $("#ipass").prop("type","password");
+    });
+    $(".fa-solid").mousedown(function(){
+        $(this).addClass("fa-eye").removeClass("fa-eye-slash");
+        $("#ipass").prop("type","text");
+    });
+
+})
+  </script>
+</head>
+  <body >
+    <nav class="navbar sticky-top bg-dark border-bottom border-bottom-dark" data-bs-theme="dark" style="background-color:mediumpurple;">
+        <div class="container-fluid" >
+          <a class="navbar-brand" ><h1>MedDon.com</h1></a>
+          <form class="d-flex">
+            <button class="btn btn-dark mar btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" >SIGN UP</button>
+            
+            <button class="btn btn-dark mar btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" >LOGIN</button>
+          </form>
+        </div>
+        
+      </nav>
+      <center><h2>Welcome to MedDon.com, where compassion meets health! </h2></center>
+      <div id="carouselExampleRide" class="carousel slide" data-bs-ride="true">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="images/c1.jpg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="images/Anera.webp" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="images/Medicines+for+donation.jpg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="images/c2.jpg" class="d-block w-100" alt="...">
+          </div>
+          
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+      <nav class="navbar  bg-dark border-bottom border-bottom-dark">
+        <div class="container-fluid">
+          <span class="navbar-brand mb-0 h1" id="serv">OUR SERVICES</span>
+        </div>
+      </nav>
+      <br>
+      <div class="card mb-3" style="max-width: inherit;border: none;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="images/p1.jpg" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">DONATION</h5><br><br>
+              <p class="card-text">We are a dedicated platform that connects individuals and organizations with a common goal: making a positive impact on the lives of those in need through medicine donation. We believe that every person deserves access to essential medications, regardless of their economic or social circumstances. By providing a platform for medicine donation, we aim to bridge the gap between surplus medications and individuals who can't afford them. <br>The significance of medicine donation cannot be overstated. Millions of people around the world struggle to access the vital medications they require for their well-being. By donating unused, unexpired medications, you can contribute to improving the quality of life for those who are less fortunate. Your donation can make a tremendous difference in someone's ability to manage chronic conditions, alleviate pain, or treat acute illnesses.</p>
+              <p class="card-text"><small class="text-body-secondary"></small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3" style="max-width: inherit;border: none;">
+        <div class="row g-0">
+          
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Guidelines for Medicine Donations:</h5>
+              <p class="card-text">- Medications must be unexpired and in their original packaging. <br>
+                - Prescription medications should be sealed and accompanied by the original prescription label. <br>
+                - Over-the-counter medications should be in unopened, tamper-evident packaging. <br>
+                - Donated medications should be properly stored, ensuring they are not exposed to extreme temperatures or excessive humidity. <br><br>Together, we can make a significant impact on healthcare inequality and ensure that no one is left behind due to a lack of access to essential medications. Join us at MedDon.com today and be part of a movement that brings hope, health, and happiness to those in need.
+        </p>
+              <p class="card-text"><small class="text-body-secondary"></small></p>
+            </div>
+          </div><div class="col-md-4">
+            <img src="images/p2.jpg" class="img-fluid rounded-start" alt="...">
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3" style="max-width: inherit;border: none;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="images/p3.jpeg" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">NON-PROFITABLE</h5>
+              <p class="card-text">A non-profit medicine donation website serves as a crucial platform that facilitates the generous act of donating unused and unexpired medicines to those in need. This platform not only promotes sustainable healthcare practices but also aims to bridge the gap between surplus medical supplies and vulnerable communities lacking access to essential medications. Through the website, individuals and organizations can contribute to the well-being of others by offering medicines they no longer need. This act of compassion not only helps alleviate financial burdens for those unable to afford medication but also contributes to reducing medical waste and promoting a more equitable healthcare system. The non-profit nature of the website ensures that the primary focus remains on humanitarian efforts and the well-being of beneficiaries, underscoring the significance of solidarity and empathy in building a healthier society for all.</p>
+              <p class="card-text"><small class="text-body-secondary"></small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3" style="max-width: inherit;border: none;">
+        <div class="row g-0">
+         
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">TERMS AND CONDITIONS</h5>
+              <p class="card-text">
+                The terms and conditions for medicine donation serve as a crucial framework that governs the process of donating and receiving medicines through a dedicated platform. These terms establish clear guidelines for both donors and recipients, ensuring the safety, legality, and ethical conduct of the donation process. Donors must certify that the medicines they contribute are unopened, sealed, and within their expiration date, adhering to the list of accepted medications. Recipients, on the other hand, agree to use the donated medicines responsibly and solely for their intended purpose. The terms also address privacy and data protection, safeguarding the personal information of all parties involved. Furthermore, they may outline the liability and disclaimers associated with the donation process, encouraging transparency and accountability. By adhering to these terms and conditions, the medicine donation platform fosters a trustworthy and altruistic environment, promoting the well-being of communities in need and encouraging responsible healthcare practices.
+               <p class="card-text"><small class="text-body-secondary"><center><a href="terms&conditions.html">Terms&Conditions</a></center></small></p>
+            </div>
+          </div> <div class="col-md-4">
+            <img src="images/tac.png" class="img-fluid rounded-start" alt="..." style="float: right;">
+          </div>
+        </div>
+      </div>
+      <nav class="navbar  bg-dark border-bottom border-bottom-dark">
+        <div class="container-fluid">
+          <span class="navbar-brand mb-0 h1" id="serv">ABOUT US</span>
+        </div>
+      </nav>
+      <div id="bout">
+      <div class="card mb-3 crd" style="max-width: 540px;">
+        <div class="row g-0 ">
+          <div class="col-md-4">
+            <img src="images/sir.jpg" class="img-fluid rounded-start" alt="..."  >
+          </div>
+          
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Developed at: <br> Bangalore Computer Classes</h5>
+              <p class="card-text">By Rajesh K. Bansal <br>
+                       Author of REAL JAVA <br>Email:bcebti@gmail.com
+              </p>
+              <p class="card-text"><small class="text-body-secondary"></small></p>
+            </div>
+          </div>
+        </div>
+      </div><div class="card mb-3 crd" style="max-width: 540px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="images/me.jpg" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Developed by: <br> Akanksha</h5>
+              <p class="card-text">Currently studying at TIET <br>2nd Year,COE <br>Email:akankshagarg5298@gmail.com </p>
+              <p class="card-text"><small class="text-body-secondary"></small></p>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <nav class="navbar  bg-dark border-bottom border-bottom-dark">
+        <div class="container-fluid">
+          <span class="navbar-brand mb-0 h1" id="serv">REACH US</span>
+        </div>
+      </nav>
+      <div><center>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3447.880734036237!2d74.9497531748279!3d30.211951274839677!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391732a4f07278a9%3A0x4a0d6293513f98ce!2sBanglore%20Computer%20Education!5e0!3m2!1sen!2sin!4v1689908996682!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></center></div>
+        <div id="last" class="p-3 mb-2 bg-dark text-white">
+          
+          <br><br><h1 style="margin-left: 200px;">MedDon.com</h1><br><br>
+          <span style="margin-top: 100px;margin-left: 200px;"><i class="fa-brands fa-instagram  fa-5x"></i></span><span style="margin-top: 100px;margin-left: 150px;"> <i class="fa-brands fa-facebook  fa-5x"></i></span><span style="margin-top: 100px;margin-left: 150px;"> <i class="fa-brands fa-twitter fa-5x"></i></span><span style="margin-top: 100px;margin-left: 150px;"> <i class="fa-brands fa-linkedin fa-5x"></i></span>
+        </div>
+      <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" id="uphead">
+            <div class="modal-header bg-dark border-bottom border-bottom-dark" data-bs-theme="dark" id="heading">
+              <center><h1 class="modal-title fs-9" id="exampleModalLabel">CREATE YOUR ACCOUNT</h1></center>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btnclose"></button>
+            </div>
+            <div >
+            <div class="logo sizebox" id="pic" >
+                </div>
+            <div class="modal-body logo" id="main">
+                <div class="col-md-10 marg" id="up">
+                    <label for="inputEmail4" class="form-label" ><i class="fa-solid fa-envelope"></i> Email <div id="errmail" style="display: inline";></div></label>
+                   
+                    <input type="email" class="form-control" id="iemail" name="nemail" placeholder="Enter your email address">
+                  </div>
+                  <div class="col-md-10 marg"  >
+                    <label for="inputPassword4" class="form-label" ><i class="fa-solid fa-lock-open"></i> Password <div id="errpwd" style="display: inline";></div></label>
+                  <div id="pwdi" >  <input type="password" class="form-control" id="ipass" name="npass" placeholder="Enter your password" >
+                    <div id="pwdl"><i class="fa-solid fa-eye-slash" ></i></div></div>
+                  </div>
+                  
+                  <div class="col-md-10 marg">
+                    <label for="type" class="form-label" >Type</label>
+                    <select id="itype" class="form-select" name="ntype" >
+                        <option>Choose your type</option>
+                        <option>Donor</option>
+                        <option>Needy</option>
+                        
+                      </select>
+                  </div>
+                  <div  id="btnsign" >
+             
+                    <button type="button" class="btn btn-dark btn-lg" id="signup">Sign Up</button>
+                    <br>
+                    <span id="btn-submit"></span>
+                
+                  </div>
+            </div>
+        </div>
+            
+          </div>
+        </div>
+      </div>
+    
+  <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-dark border-bottom border-bottom-dark" data-bs-theme="dark">
+          <h1 class="modal-title fs-5"id="exampleModalLabel2" >LOGIN</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <center><div id="loginimg"></div></center>
+            <div class="col-md-12">
+                <label for="inputEmail4" class="form-label"><i class="fa-solid fa-envelope"></i> Email</label>
+               
+                <input type="email" class="form-control" id="ilemail" name="nlemail">
+              </div><br>
+              <div class="col-md-12">
+                <label for="inputPassword4" class="form-label"><i class="fa-solid fa-lock-open"></i> Password</label>
+                <input type="password" class="form-control" id="ilpass" name="nlpass">
+              </div>
+              <div class="col-md-12">
+        </div>
+        <div class="modal-footer">
+          
+          <button type="button" class="btn btn-dark btn-lg" id="loginacc">LOGIN</button>
+          <span id="btn-login"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>

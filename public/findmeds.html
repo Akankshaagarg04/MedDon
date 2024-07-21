@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="script/angular.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <style>
+    #findmedsel{
+      margin-top: 30px;
+      margin-bottom: 50px;
+    }
+    .mrgi{
+      margin-left: 150px;
+    }
+    #pict{
+      background-image: url(images/profile.jpg);
+      width: 100px;
+      height: 100px;
+    }
+  </style>
+  <script>
+    var module = angular.module("myModule", []);
+    module.controller("myController", function ($scope, $http) {
+      $scope.selcity;
+      $scope.selmed;
+      $scope.findcity = function () {
+        var url = "/get-angular-city";
+        $http.get(url).then(done, fail);
+        function done(respo) {
+          $scope.jsonArray1 = respo.data;
+        }
+        function fail(response) {
+          alert(response.data);
+        }
+
+      }
+      $scope.findmed = function () {
+        var url = "/get-angular-med";
+        $http.get(url).then(done, fail);
+        function done(respo) {
+          $scope.jsonArray2 = respo.data;
+        }
+        function fail(response) {
+          alert(response.data);
+        }
+
+      }
+      $scope.showsel = function () {
+        alert();
+        alert($scope.selcity.city);
+        alert($scope.selmed.medname);
+        var url = "/get-innerjoin?namemed=" + $scope.selmed.medname + "&namecity=" + $scope.selcity.city;
+        $http.get(url).then(done, fail);
+        function done(respo) {
+          $scope.jsonArray3 = respo.data;
+        }
+        function fail(response) {
+          alert(response.data);
+        }
+      }
+      $scope.showModel = function (selecind) {
+        $scope.selOneObj = $scope.jsonArray3[selecind];
+      }
+
+    })
+  </script>
+  <style>
+    #findmedsel{
+      display: flex;
+    }
+    .car{
+      display: flex;
+    }
+  </style>
+</head>
+
+<body ng-app="myModule" ng-controller="myController" ng-init="findcity();findmed();">
+  <nav class="navbar sticky-top bg-dark border-bottom border-bottom-dark" data-bs-theme="dark" style="background-color:mediumpurple;">
+    <div class="container-fluid" >
+      <a class="navbar-brand" ><h1>MedDon.com</h1></a>
+      <form class="d-flex">
+        </form>
+    </div>
+  </nav>
+  <div id="findmedsel">
+  <div class="col-md-4 mrgi">
+    <label for="inputcity" class="form-label">City</label>
+    <select id="inputcity" class="form-select" ng-model="selcity" ng-options="obj.city for obj in jsonArray1">
+      <option>Select</option>
+
+    </select>
+  </div>
+  <div class="col-md-4 mrgi">
+    <label for="inputmed" class="form-label">Medicine</label>
+    <select id="inputmed" class="form-select" ng-model="selmed" ng-options="obj.medname for obj in jsonArray2">
+      <option>Select</option>
+
+    </select>
+  </div>
+</div>
+  <center><button type="button" class="btn btn-dark" ng-click="showsel();">Show all Donors</button></center>
+<div class="car">
+  <div class="card " ng-repeat="obj in jsonArray3" style="height: 350px;width: 300px;margin-left: 50px;margin-top: 30px;">
+       
+    <div class="card-body">
+      <center><div id="pict"></div></center>
+      <br>
+      <center>     <h5 class="card-title">{{obj.nameofp}}</h5>
+      <p class="card-text">{{obj.address}}</p>
+      <p class="card-text">{{obj.city}}</p>
+       <button type="button" class="btn btn-dark btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        ng-click="showModel($index)">
+        more info
+      </button></center>
+ 
+    </div>
+  </div>
+</div> 
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">More info</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Name:{{selOneObj.nameofp}}
+          <br>
+          Address:{{selOneObj.address}}
+          <br>
+          City:{{selOneObj.city}}
+          <br>
+          Gender:{{selOneObj.gender}}
+          <br>
+          Contact:{{selOneObj.contnum}}
+          <br>
+          Available hours:{{selOneObj.availhrs}}
+          <br>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>
